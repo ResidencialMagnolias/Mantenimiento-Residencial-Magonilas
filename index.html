@@ -25,7 +25,6 @@
         body { background-color: var(--bg-cream); color: var(--text-main); padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
 
-        /* Header */
         header {
             background: linear-gradient(135deg, var(--sage-dark), #1E3529);
             color: white;
@@ -39,11 +38,10 @@
             gap: 15px;
             box-shadow: 0 4px 15px rgba(44, 76, 59, 0.15);
         }
-        header h1 { font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        header h1 { font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
         header p { color: #CBE0D5; font-size: 0.9rem; margin-top: 4px; }
-        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-        /* Buttons */
         button {
             cursor: pointer; border: none; border-radius: 8px; padding: 10px 16px;
             font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
@@ -59,7 +57,6 @@
         .btn-del { background-color: #FEE2E2; color: #DC2626; }
         .btn-del:hover { background-color: #FECACA; }
 
-        /* Alert Banner */
         #alertBanner {
             display: none;
             background-color: var(--alert-red-bg);
@@ -69,13 +66,11 @@
             border-radius: 10px;
             margin-bottom: 20px;
             font-weight: 500;
-            box-shadow: 0 2px 8px rgba(217, 48, 37, 0.1);
         }
 
-        /* KPI Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -92,7 +87,6 @@
         .kpi-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
         .kpi-value { font-size: 2rem; font-weight: 700; margin-top: 6px; color: var(--text-main); }
 
-        /* Form Section */
         .panel {
             background: var(--card-white);
             padding: 22px;
@@ -112,13 +106,10 @@
             width: 100%; padding: 10px; border: 1px solid #DCD7D4; border-radius: 8px;
             font-size: 0.9rem; background: #FFFEFD;
         }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--magnolia-pink); }
 
-        /* Filters */
         .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-        .filters select, .filters input { padding: 8px 12px; border: 1px solid #DCD7D4; border-radius: 8px; font-size: 0.85rem; }
+        .filters select { padding: 8px 12px; border: 1px solid #DCD7D4; border-radius: 8px; font-size: 0.85rem; }
 
-        /* Table */
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background-color: var(--sage-light); color: var(--sage-dark); padding: 12px; font-size: 0.85rem; }
@@ -128,12 +119,23 @@
         tr.row-done { opacity: 0.65; }
         tr.row-done .task-text { text-decoration: line-through; }
 
-        /* Badges */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
         .badge-overdue { background: #FAD2CF; color: #A51D13; }
         .badge-warning { background: #FEEFC3; color: #B06000; }
         .badge-pending { background: #E8EAED; color: #3C4043; }
         .badge-done { background: #CEEAD6; color: #137333; }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: white; padding: 28px; border-radius: 16px; width: 90%; max-width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .role-pill {
+            background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -142,19 +144,18 @@
     <header>
         <div>
             <h1>🌸 Mantenimiento Residencial Magnolias</h1>
-            <p>Panel de Control Operativo, Alertas de Cumplimiento y Sincronización</p>
+            <p>Control Operativo en Tiempo Real y Alertas de Cumplimiento</p>
         </div>
         <div class="header-actions">
-            <button class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV (Google)</button>
-            <button class="btn-secondary" onclick="exportJSON()">💾 Respaldo JSON</button>
-            <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📂 Cargar Respaldo</button>
-            <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
+            <span id="roleIndicator" class="role-pill">👁️ Modo Lectura</span>
+            <button class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV</button>
+            <button id="btnLoginOpen" class="btn-primary" onclick="openLogin()">🔐 Acceso Admin</button>
+            <button id="btnLogout" class="btn-secondary" style="display:none;" onclick="logoutAdmin()">🚪 Cerrar Sesión</button>
         </div>
     </header>
 
     <div id="alertBanner"></div>
 
-    <!-- KPIs -->
     <div class="kpi-grid">
         <div class="kpi-card">
             <div class="kpi-title">Total Actividades</div>
@@ -174,9 +175,8 @@
         </div>
     </div>
 
-    <!-- Agregar Tarea -->
-    <div class="panel">
-        <div class="panel-title">➕ Agregar Nueva Actividad de Mantenimiento</div>
+    <div id="adminPanel" class="panel" style="display:none;">
+        <div class="panel-title">➕ Agregar Nueva Actividad (Modo Administrador)</div>
         <form id="taskForm" class="form-grid" onsubmit="addTask(event)">
             <div class="form-group">
                 <label>Fecha Programada</label>
@@ -195,23 +195,21 @@
             </div>
             <div class="form-group" style="grid-column: span 2;">
                 <label>Descripción de la Actividad</label>
-                <input type="text" id="tDesc" placeholder="Ej. Poda de árboles en Parque 1 y revisión de luminarias" required>
+                <input type="text" id="tDesc" placeholder="Ej. Limpieza y pintura de líneas en cancha de basketball" required>
             </div>
             <div class="form-group">
                 <label>Responsable</label>
                 <input type="text" id="tResp" placeholder="Ej. Personal Interno / Proveedor" required>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Guardar Tarea</button>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Guardar en Nube</button>
             </div>
         </form>
     </div>
 
-    <!-- Listado y Filtros -->
     <div class="panel">
         <div class="panel-title">📋 Cronograma y Control de Alertas</div>
         <div class="filters">
             <select id="filterArea" onchange="renderTasks()">
                 <option value="ALL">Todas las Áreas</option>
                 <option value="🌿 Jardinería y 3 Parques">🌿 Jardinería y 3 Parques</option>
-                <option value="🏀 Cancha de Basketball">🏀 Cancha de Basketball</option>
