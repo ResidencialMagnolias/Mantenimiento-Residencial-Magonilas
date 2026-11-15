@@ -127,14 +127,18 @@
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000;
+            background: rgba(0,0,0,0.55); justify-content: center; align-items: center; z-index: 9999;
         }
         .modal-content {
             background: white; padding: 28px; border-radius: 16px; width: 90%; max-width: 380px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
         .role-pill {
             background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem;
+        }
+        #loginErrorMsg {
+            color: #D93025; font-size: 0.82rem; margin-bottom: 12px; display: none;
+            background: #FDECEA; padding: 8px 10px; border-radius: 6px;
         }
     </style>
 </head>
@@ -148,9 +152,9 @@
         </div>
         <div class="header-actions">
             <span id="roleIndicator" class="role-pill">👁️ Modo Lectura</span>
-            <button type="button" class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV</button>
-            <button type="button" id="btnLoginOpen" class="btn-primary" onclick="openLogin()">🔐 Acceso Admin</button>
-            <button type="button" id="btnLogout" class="btn-secondary" style="display:none;" onclick="logoutAdmin()">🚪 Cerrar Sesión</button>
+            <button type="button" id="btnExport" class="btn-secondary">📥 Exportar CSV</button>
+            <button type="button" id="btnLoginOpen" class="btn-primary">🔐 Acceso Admin</button>
+            <button type="button" id="btnLogout" class="btn-secondary" style="display:none;">🚪 Cerrar Sesión</button>
         </div>
     </header>
 
@@ -177,7 +181,7 @@
 
     <div id="adminPanel" class="panel" style="display:none;">
         <div class="panel-title">➕ Agregar Nueva Actividad (Modo Administrador)</div>
-        <form id="taskForm" class="form-grid" onsubmit="addTask(event)">
+        <form id="taskForm" class="form-grid">
             <div class="form-group">
                 <label>Fecha Programada</label>
                 <input type="date" id="tDate" required>
@@ -210,5 +214,4 @@
     <div class="panel">
         <div class="panel-title">📋 Cronograma y Control de Alertas</div>
         <div class="filters">
-            <select id="filterArea" onchange="renderTasks()">
-                <option value="ALL">Todas las Áreas</option>
+            <select id="filterArea">
