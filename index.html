@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Mantenimiento | Residencial Magnolias v3</title>
+    <title>Control de Mantenimiento | Residencial Magnolias v4</title>
     <style>
         :root {
             --bg-cream: #FAF7F5;
@@ -144,27 +144,27 @@
         </div>
         <div class="header-actions">
             <span id="roleIndicator" class="role-pill">👁️ Modo Lectura</span>
-            <button type="button" id="btnExport" class="btn-secondary">📥 Exportar CSV</button>
-            <button type="button" id="btnLogout" class="btn-secondary" style="display:none;">🚪 Cerrar Sesión</button>
+            <button type="button" class="btn-secondary" onclick="cargarTareas()">🔄 Actualizar</button>
+            <button type="button" class="btn-secondary" onclick="exportarCSV()">📥 Exportar CSV</button>
+            <button type="button" id="btnLogout" class="btn-secondary" style="display:none;" onclick="cerrarSesion()">🚪 Cerrar Sesión</button>
         </div>
     </header>
 
-    <!-- Acceso Directo Visible (sin botones ocultos) -->
     <div id="loginBox" class="panel" style="border-left: 5px solid var(--magnolia-pink);">
         <div class="panel-title">🔐 Acceso Administrador (Ingresa tus credenciales para agregar o editar tareas)</div>
-        <form id="loginForm" class="form-grid">
+        <div class="form-grid">
             <div class="form-group">
                 <label>Correo de Administrador</label>
-                <input type="email" id="loginEmail" required placeholder="tu-correo@ejemplo.com">
+                <input type="email" id="loginEmail" placeholder="tu-correo@ejemplo.com">
             </div>
             <div class="form-group">
                 <label>Contraseña</label>
-                <input type="password" id="loginPass" required placeholder="••••••••">
+                <input type="password" id="loginPass" placeholder="••••••••">
             </div>
             <div class="form-group">
-                <button type="submit" id="btnSubmitLogin" class="btn-primary" style="width:100%; justify-content:center;">Ingresar como Admin</button>
+                <button type="button" id="btnSubmitLogin" class="btn-primary" style="width:100%; justify-content:center;" onclick="iniciarSesion()">Ingresar como Admin</button>
             </div>
-        </form>
+        </div>
         <div id="loginErrorMsg"></div>
     </div>
 
@@ -191,14 +191,14 @@
 
     <div id="adminPanel" class="panel" style="display:none;">
         <div class="panel-title">➕ Agregar Nueva Actividad (Modo Administrador)</div>
-        <form id="taskForm" class="form-grid">
+        <div class="form-grid">
             <div class="form-group">
                 <label>Fecha Programada</label>
-                <input type="date" id="tDate" required>
+                <input type="date" id="tDate">
             </div>
             <div class="form-group">
                 <label>Área / Zona</label>
-                <select id="tArea" required>
+                <select id="tArea">
                     <option value="🌿 Jardinería y 3 Parques">🌿 Jardinería y 3 Parques</option>
                     <option value="🏀 Cancha de Basketball">🏀 Cancha de Basketball</option>
                     <option value="💧 Cisterna e Hidroneumático">💧 Cisterna e Hidroneumático</option>
@@ -209,7 +209,7 @@
             </div>
             <div class="form-group" style="grid-column: span 2;">
                 <label>Descripción de la Actividad</label>
-                <input type="text" id="tDesc" placeholder="Ej. Limpieza y pintura de líneas en cancha de basketball" required>
+                <input type="text" id="tDesc" placeholder="Ej. Limpieza y pintura de líneas en cancha de basketball">
             </div>
             <div class="form-group">
                 <label>Responsable</label>
