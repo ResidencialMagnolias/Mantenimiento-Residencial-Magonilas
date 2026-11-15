@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Mantenimiento | Residencial Magnolias v2</title>
+    <title>Control de Mantenimiento | Residencial Magnolias v3</title>
     <style>
         :root {
             --bg-cream: #FAF7F5;
@@ -145,26 +145,24 @@
         <div class="header-actions">
             <span id="roleIndicator" class="role-pill">👁️ Modo Lectura</span>
             <button type="button" id="btnExport" class="btn-secondary">📥 Exportar CSV</button>
-            <button type="button" id="btnLoginOpen" class="btn-primary" onclick="mostrarLogin()">🔐 Acceso Admin</button>
             <button type="button" id="btnLogout" class="btn-secondary" style="display:none;">🚪 Cerrar Sesión</button>
         </div>
     </header>
 
-    <!-- Caja de inicio de sesión integrada (sin ventanas emergentes) -->
-    <div id="loginBox" class="panel" style="display:none; border: 2px solid var(--magnolia-pink);">
-        <div class="panel-title">🔐 Iniciar Sesión como Administrador</div>
+    <!-- Acceso Directo Visible (sin botones ocultos) -->
+    <div id="loginBox" class="panel" style="border-left: 5px solid var(--magnolia-pink);">
+        <div class="panel-title">🔐 Acceso Administrador (Ingresa tus credenciales para agregar o editar tareas)</div>
         <form id="loginForm" class="form-grid">
             <div class="form-group">
-                <label>Correo Electrónico</label>
+                <label>Correo de Administrador</label>
                 <input type="email" id="loginEmail" required placeholder="tu-correo@ejemplo.com">
             </div>
             <div class="form-group">
                 <label>Contraseña</label>
                 <input type="password" id="loginPass" required placeholder="••••••••">
             </div>
-            <div class="form-group" style="display:flex; gap:10px;">
-                <button type="submit" id="btnSubmitLogin" class="btn-primary" style="flex:1; justify-content:center;">Ingresar</button>
-                <button type="button" class="btn-cal" onclick="ocultarLogin()">Cancelar</button>
+            <div class="form-group">
+                <button type="submit" id="btnSubmitLogin" class="btn-primary" style="width:100%; justify-content:center;">Ingresar como Admin</button>
             </div>
         </form>
         <div id="loginErrorMsg"></div>
@@ -211,3 +209,7 @@
             </div>
             <div class="form-group" style="grid-column: span 2;">
                 <label>Descripción de la Actividad</label>
+                <input type="text" id="tDesc" placeholder="Ej. Limpieza y pintura de líneas en cancha de basketball" required>
+            </div>
+            <div class="form-group">
+                <label>Responsable</label>
