@@ -148,9 +148,9 @@
         </div>
         <div class="header-actions">
             <span id="roleIndicator" class="role-pill">👁️ Modo Lectura</span>
-            <button class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV</button>
-            <button id="btnLoginOpen" class="btn-primary" onclick="openLogin()">🔐 Acceso Admin</button>
-            <button id="btnLogout" class="btn-secondary" style="display:none;" onclick="logoutAdmin()">🚪 Cerrar Sesión</button>
+            <button type="button" class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV</button>
+            <button type="button" id="btnLoginOpen" class="btn-primary" onclick="openLogin()">🔐 Acceso Admin</button>
+            <button type="button" id="btnLogout" class="btn-secondary" style="display:none;" onclick="logoutAdmin()">🚪 Cerrar Sesión</button>
         </div>
     </header>
 
@@ -202,7 +202,7 @@
                 <input type="text" id="tResp" placeholder="Ej. Personal Interno / Proveedor" required>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Guardar en Nube</button>
+                <button type="submit" id="btnSaveTask" class="btn-primary" style="width: 100%; justify-content: center;">Guardar en Nube</button>
             </div>
         </form>
     </div>
@@ -212,4 +212,3 @@
         <div class="filters">
             <select id="filterArea" onchange="renderTasks()">
                 <option value="ALL">Todas las Áreas</option>
-                <option value="🌿 Jardinería y 3 Parques">🌿 Jardinería y 3 Parques</option>
