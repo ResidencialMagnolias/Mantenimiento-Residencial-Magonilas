@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Mantenimiento | Residencial Magnolias</title>
+    <style>
+        :root {
+            --bg-cream: #FAF7F5;
+            --card-white: #FFFFFF;
+            --sage-dark: #2C4C3B;
+            --sage-light: #E8F0EC;
+            --magnolia-pink: #D88C9A;
+            --magnolia-plum: #6D3B47;
+            --text-main: #2D312E;
+            --text-muted: #6B726E;
+            --alert-red-bg: #FDECEA;
+            --alert-red-border: #D93025;
+            --alert-yellow-bg: #FEF7E0;
+            --alert-yellow-border: #F29900;
+            --success-green: #1E8E3E;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-cream); color: var(--text-main); padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--sage-dark), #1E3529);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(44, 76, 59, 0.15);
+        }
+        header h1 { font-size: 1.6rem; display: flex; align-items: center; gap: 10px; }
+        header p { color: #CBE0D5; font-size: 0.9rem; margin-top: 4px; }
+        .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        /* Buttons */
+        button {
+            cursor: pointer; border: none; border-radius: 8px; padding: 10px 16px;
+            font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background-color: var(--magnolia-pink); color: #fff; }
+        .btn-primary:hover { background-color: var(--magnolia-plum); }
+        .btn-secondary { background-color: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .btn-secondary:hover { background-color: rgba(255,255,255,0.25); }
+        .btn-sm { padding: 6px 10px; font-size: 0.78rem; }
+        .btn-cal { background-color: var(--sage-light); color: var(--sage-dark); }
+        .btn-cal:hover { background-color: #D2E3DA; }
+        .btn-del { background-color: #FEE2E2; color: #DC2626; }
+        .btn-del:hover { background-color: #FECACA; }
+
+        /* Alert Banner */
+        #alertBanner {
+            display: none;
+            background-color: var(--alert-red-bg);
+            border-left: 5px solid var(--alert-red-border);
+            color: #A51D13;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(217, 48, 37, 0.1);
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: var(--card-white);
+            padding: 20px;
+            border-radius: 14px;
+            border-top: 4px solid var(--sage-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .kpi-card.pink { border-top-color: var(--magnolia-pink); }
+        .kpi-card.alert { border-top-color: var(--alert-red-border); }
+        .kpi-card.success { border-top-color: var(--success-green); }
+        .kpi-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
+        .kpi-value { font-size: 2rem; font-weight: 700; margin-top: 6px; color: var(--text-main); }
+
+        /* Form Section */
+        .panel {
+            background: var(--card-white);
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+        }
+        .panel-title { font-size: 1.1rem; color: var(--magnolia-plum); margin-bottom: 16px; font-weight: 700; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px; border: 1px solid #DCD7D4; border-radius: 8px;
+            font-size: 0.9rem; background: #FFFEFD;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--magnolia-pink); }
+
+        /* Filters */
+        .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+        .filters select, .filters input { padding: 8px 12px; border: 1px solid #DCD7D4; border-radius: 8px; font-size: 0.85rem; }
+
+        /* Table */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background-color: var(--sage-light); color: var(--sage-dark); padding: 12px; font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid #EFECE9; font-size: 0.9rem; vertical-align: middle; }
+        tr.row-overdue { background-color: var(--alert-red-bg); }
+        tr.row-warning { background-color: var(--alert-yellow-bg); }
+        tr.row-done { opacity: 0.65; }
+        tr.row-done .task-text { text-decoration: line-through; }
+
+        /* Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .badge-overdue { background: #FAD2CF; color: #A51D13; }
+        .badge-warning { background: #FEEFC3; color: #B06000; }
+        .badge-pending { background: #E8EAED; color: #3C4043; }
+        .badge-done { background: #CEEAD6; color: #137333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>🌸 Mantenimiento Residencial Magnolias</h1>
+            <p>Panel de Control Operativo, Alertas de Cumplimiento y Sincronización</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-secondary" onclick="exportCSV()">📥 Exportar CSV (Google)</button>
+            <button class="btn-secondary" onclick="exportJSON()">💾 Respaldo JSON</button>
+            <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📂 Cargar Respaldo</button>
+            <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
+        </div>
+    </header>
+
+    <div id="alertBanner"></div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-title">Total Actividades</div>
+            <div class="kpi-value" id="kpiTotal">0</div>
+        </div>
+        <div class="kpi-card success">
+            <div class="kpi-title">Completadas</div>
+            <div class="kpi-value" id="kpiDone">0</div>
+        </div>
+        <div class="kpi-card alert">
+            <div class="kpi-title">🚨 Vencidas (Alerta)</div>
+            <div class="kpi-value" id="kpiOverdue">0</div>
+        </div>
+        <div class="kpi-card pink">
+            <div class="kpi-title">% Cumplimiento</div>
+            <div class="kpi-value" id="kpiPercent">0%</div>
+        </div>
+    </div>
+
+    <!-- Agregar Tarea -->
+    <div class="panel">
+        <div class="panel-title">➕ Agregar Nueva Actividad de Mantenimiento</div>
+        <form id="taskForm" class="form-grid" onsubmit="addTask(event)">
+            <div class="form-group">
+                <label>Fecha Programada</label>
+                <input type="date" id="tDate" required>
+            </div>
+            <div class="form-group">
+                <label>Área / Zona</label>
+                <select id="tArea" required>
+                    <option value="🌿 Jardinería y 3 Parques">🌿 Jardinería y 3 Parques</option>
+                    <option value="🏀 Cancha de Basketball">🏀 Cancha de Basketball</option>
+                    <option value="💧 Cisterna e Hidroneumático">💧 Cisterna e Hidroneumático</option>
+                    <option value="⚡ Iluminación y Electricidad">⚡ Iluminación y Electricidad</option>
+                    <option value="🛡️ Seguridad y Portones">🛡️ Seguridad y Portones</option>
+                    <option value="🏢 Infraestructura General">🏢 Infraestructura General</option>
+                </select>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Descripción de la Actividad</label>
+                <input type="text" id="tDesc" placeholder="Ej. Poda de árboles en Parque 1 y revisión de luminarias" required>
+            </div>
+            <div class="form-group">
+                <label>Responsable</label>
+                <input type="text" id="tResp" placeholder="Ej. Personal Interno / Proveedor" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Guardar Tarea</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Listado y Filtros -->
+    <div class="panel">
+        <div class="panel-title">📋 Cronograma y Control de Alertas</div>
+        <div class="filters">
+            <select id="filterArea" onchange="renderTasks()">
+                <option value="ALL">Todas las Áreas</option>
+                <option value="🌿 Jardinería y 3 Parques">🌿 Jardinería y 3 Parques</option>
+                <option value="🏀 Cancha de Basketball">🏀 Cancha de Basketball</option>
